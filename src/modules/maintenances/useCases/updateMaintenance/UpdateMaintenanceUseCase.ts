@@ -5,6 +5,7 @@ import { IIpAddressRepository } from '@modules/machines/repositories/IIpAddressR
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository'
 import { IMaintenancesRepository } from '@modules/maintenances/repositories/IMaintenancesRepository'
 import { inject, injectable } from 'tsyringe'
+import dayjs from 'dayjs'
 
 interface IRequest {
   ip: string
@@ -104,12 +105,27 @@ class UpdateMaintenanceUseCase {
         motherboard,
       })
     }
+    dayjs.locale('pt-br')
+    let date
+    date = new Date(maintenanceDate)
+    date =
+      date.getUTCFullYear() +
+      '-' +
+      ('00' + (date.getUTCMonth() + 1)).slice(-2) +
+      '-' +
+      ('00' + date.getUTCDate()).slice(-2) +
+      ' ' +
+      ('00' + dayjs().hour()).slice(-2) +
+      ':' +
+      ('00' + dayjs().minute()).slice(-2) +
+      ':' +
+      ('00' + dayjs().second()).slice(-2)
 
     await this.maintenancesRepository.update(maintenanceId, {
       departmentId: department.id,
       userId: user.id,
       machineId: machine.id,
-      maintenanceDate: new Date(maintenanceDate),
+      maintenanceDate: new Date(date),
       description,
     })
   }

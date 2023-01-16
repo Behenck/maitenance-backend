@@ -19,9 +19,9 @@ class MaintenancesRepository implements IMaintenancesRepository {
     })
   }
 
-  async show(): Promise<Maintenance[]> {
+  async show(take?: string): Promise<Maintenance[]> {
     const maintenances = await prisma.maintenance.findMany({
-      take: 10,
+      take: take ? Number(take) : 99999999999999,
       orderBy: {
         maintenanceDate: 'desc',
       },
@@ -51,12 +51,7 @@ class MaintenancesRepository implements IMaintenancesRepository {
       where: {
         id: maintenanceId,
       },
-      data: {
-        departmentId: data.departmentId,
-        machineId: data.machineId,
-        maintenanceDate: data.maintenanceDate,
-        description: data?.description,
-      },
+      data,
     })
   }
 
@@ -87,14 +82,44 @@ class MaintenancesRepository implements IMaintenancesRepository {
       },
     })
 
-    const lastMaintenance = {
-      id: maintenance[0].id,
-      name: maintenance[0].user.name,
-      department: maintenance[0].department.name,
-      maintenanceDate: maintenance[0].maintenanceDate,
-    }
+    return maintenance[0]
+  }
 
-    return lastMaintenance
+  async search(search: string): Promise<Maintenance[]> {
+    const maintenances = await prisma.maintenance.findMany({
+      where: {
+        OR: [
+          {
+            machine: {
+              ip: {
+                contains: search,
+              },
+            },
+          },
+          {
+            user: {
+              name: {
+                contains: search,
+              },
+            },
+          },
+          {
+            department: {
+              name: {
+                contains: search,
+              },
+            },
+          },
+        ],
+      },
+      include: {
+        machine: true,
+        user: true,
+        department: true,
+      },
+    })
+
+    return maintenances
   }
 }
 

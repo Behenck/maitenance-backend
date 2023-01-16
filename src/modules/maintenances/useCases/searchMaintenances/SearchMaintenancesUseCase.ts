@@ -3,18 +3,18 @@ import { IMaintenancesRepository } from '@modules/maintenances/repositories/IMai
 import { inject, injectable } from 'tsyringe'
 
 @injectable()
-class ShowMaintenancesUseCase {
-  /* eslint-disable */
+class SearchMaintenancesUseCase {/* eslint-disable */
   constructor(
-    @inject('MaintenancesRepository')
-    private maintenancesRepository: IMaintenancesRepository,
+    @inject("MaintenancesRepository") 
+    private maintenancesRepository: IMaintenancesRepository
   ) {}
-  /* eslint-enable */
 
-  async execute(take?: string): Promise<Maintenance[]> {
-    const maintenances = await this.maintenancesRepository.show(take)
+  /* eslint-enable */
+  async execute(search: string): Promise<Maintenance[]> {
+    const maintenances = await this.maintenancesRepository.search(search)
+
     return maintenances
   }
 }
 
-export { ShowMaintenancesUseCase }
+export { SearchMaintenancesUseCase }

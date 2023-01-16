@@ -20,7 +20,7 @@ interface IRequest {
 
 class UpdateMaintenanceController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { maintenaceId } = request.params
+    const { id } = request.params
 
     const {
       userName,
@@ -38,7 +38,7 @@ class UpdateMaintenanceController {
 
     const updateMaintenanceUseCase = container.resolve(UpdateMaintenanceUseCase)
 
-    await updateMaintenanceUseCase.execute(maintenaceId, {
+    await updateMaintenanceUseCase.execute(id, {
       userName,
       departmentName,
       ip,
