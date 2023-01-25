@@ -2,7 +2,7 @@ interface ICreateMaintenancesDTO {
   userId: string
   departmentId: string
   machineId: string
-  maintenanceDate: Date
+  maintenanceDate: string
   description?: string
 }
 

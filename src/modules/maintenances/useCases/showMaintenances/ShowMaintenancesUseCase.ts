@@ -11,8 +11,8 @@ class ShowMaintenancesUseCase {
   ) {}
   /* eslint-enable */
 
-  async execute(take?: string): Promise<Maintenance[]> {
-    const maintenances = await this.maintenancesRepository.show(take)
+  async execute(): Promise<Maintenance[]> {
+    const maintenances = await this.maintenancesRepository.show()
     return maintenances
   }
 }

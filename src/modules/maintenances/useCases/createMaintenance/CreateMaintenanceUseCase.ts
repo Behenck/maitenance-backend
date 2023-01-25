@@ -103,27 +103,16 @@ class CreateMaintenanceUseCase {
         motherboard,
       })
     }
-    dayjs.locale('pt-br')
-    let date
-    date = new Date(maintenanceDate)
-    date =
-      date.getUTCFullYear() +
-      '-' +
-      ('00' + (date.getUTCMonth() + 1)).slice(-2) +
-      '-' +
-      ('00' + date.getUTCDate()).slice(-2) +
-      ' ' +
-      ('00' + dayjs().hour()).slice(-2) +
-      ':' +
-      ('00' + dayjs().minute()).slice(-2) +
-      ':' +
-      ('00' + dayjs().second()).slice(-2)
+
+    const serverTime = dayjs();
+    const combinedDate = dayjs(maintenanceDate).set("hour", serverTime.hour()).set("minute", serverTime.minute()).set("second", serverTime.second());
+    console.log(combinedDate)
 
     await this.maintenancesRepository.create({
       departmentId: department.id,
       userId: user.id,
       machineId: machine.id,
-      maintenanceDate: new Date(date),
+      maintenanceDate: combinedDate.toISOString(),
       description,
     })
   }
